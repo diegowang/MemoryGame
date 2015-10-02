@@ -1,5 +1,6 @@
 package com.example.hwang.memorygame;
 
+import android.content.SharedPreferences;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.AudioManager;
@@ -11,12 +12,21 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.util.Random;
 
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener {
+
+    //for our hiscore (phase 4)
+    SharedPreferences prefs;
+    SharedPreferences.Editor editor;
+    String dataName = "MyData";
+    String intName = "MyInt";
+    int defaultInt = 0;
+    int hiScore;
 
     //Prepare objects and sound references
 
@@ -59,6 +69,12 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game);
+
+        //phase 4
+        //initialize our two SharedPreferences objects
+        prefs = getSharedPreferences(dataName,MODE_PRIVATE);
+        editor = prefs.edit();
+        hiScore = prefs.getInt(intName, defaultInt);
 
         soundPool = new SoundPool(10, AudioManager.STREAM_MUSIC,0);
         try{
@@ -269,13 +285,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 //don't checkElelment anymore
                 isResponding = false;
 
-                /*//for our high score (phase 4)
+                //for our high score (phase 4)
                 if(playerScore > hiScore) {
                     hiScore = playerScore;
                     editor.putInt(intName, hiScore);
                     editor.commit();
-                    Toast.makeText(getApplicationContext(), "New Hi-score", Toast.LENGTH_LONG).show();
-                }*/
+                    Toast.makeText(getApplicationContext(), "New Hi-score", Toast.LENGTH_SHORT).show();
+                }
 
             }
 
