@@ -174,6 +174,42 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View v) {
+        if (!playSequence) {//only accept input if sequence  not playing
+            switch (v.getId()) {
+                //case statements here...
+                case R.id.button2:
+                    //play a sound
+                    soundPool.play(sample1, 1, 1, 0, 0, 1);
+                    checkElement(1);
+                    break;
+
+                case R.id.button3:
+                    //play a sound
+                    soundPool.play(sample2, 1, 1, 0, 0, 1);
+                    checkElement(2);
+                    break;
+
+                case R.id.button4:
+                    //play a sound
+                    soundPool.play(sample3, 1, 1, 0, 0, 1);
+                    checkElement(3);
+                    break;
+
+                case R.id.button5:
+                    //play a sound
+                    soundPool.play(sample4, 1, 1, 0, 0, 1);
+                    checkElement(4);
+                    break;
+
+                case R.id.buttonReplay:
+                    difficultyLevel = 3;
+                    playerScore = 0;
+                    textScore.setText("Score: " + playerScore);
+                    playASequence();
+                    break;
+
+            }
+        }
 
     }
 
@@ -209,5 +245,41 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         button4.setVisibility(View.VISIBLE);
         textWatchGo.setText("GO!");
         isResponding = true;
+    }
+
+    public void checkElement(int thisElement){
+
+        if(isResponding) {
+            playerResponses++;
+            if (sequenceToCopy[playerResponses-1] == thisElement) {//Correct
+                playerScore = playerScore + ((thisElement + 1) * 2);
+                textScore.setText("Score: " + playerScore);
+                if (playerResponses == difficultyLevel) {//got the whole sequence
+                    //don't checkElelment anymore
+                    isResponding = false;
+                    //now raise the difficulty
+                    difficultyLevel++;
+                    //and play another sequence
+                    playASequence();
+                }
+
+            } else {//wrong answer
+
+                textWatchGo.setText("FAILED!");
+                //don't checkElelment anymore
+                isResponding = false;
+
+                /*//for our high score (phase 4)
+                if(playerScore > hiScore) {
+                    hiScore = playerScore;
+                    editor.putInt(intName, hiScore);
+                    editor.commit();
+                    Toast.makeText(getApplicationContext(), "New Hi-score", Toast.LENGTH_LONG).show();
+                }*/
+
+            }
+
+        }
+
     }
 }
